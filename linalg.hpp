@@ -1,4 +1,115 @@
- template<class T, size_t N>
+struct Float4 {
+		union {
+			Float v[4];
+			__m128 m;
+		};
+
+		explicit Float4(Float x) { for (int32_t i = 0; i < 4; i++)v[i] = x; }
+
+		Float4() = default;
+
+		explicit Float4(__m128 x) { m = x; }
+
+		inline Float4& operator+=(const Float4& rhs) {
+			v[0] += rhs.v[0];
+			v[1] += rhs.v[1];
+			v[2] += rhs.v[2];
+			v[3] += rhs.v[3];
+			return *this;
+		}
+
+		inline Float4& operator-=(const Float4& rhs) {
+			v[0] -= rhs.v[0];
+			v[1] -= rhs.v[1];
+			v[2] -= rhs.v[2];
+			v[3] -= rhs.v[3];
+			return *this;
+		}
+
+		inline Float4& operator*=(const Float4& rhs) {
+			v[0] *= rhs.v[0];
+			v[1] *= rhs.v[1];
+			v[2] *= rhs.v[2];
+			v[3] *= rhs.v[3];
+			return *this;
+		}
+
+		inline Float4& operator/=(const Float4& rhs) {
+			v[0] /= rhs.v[0];
+			v[1] /= rhs.v[1];
+			v[2] /= rhs.v[2];
+			v[3] /= rhs.v[3];
+			return *this;
+		}
+
+		inline Float4 operator+(const Float4& rhs) const {
+			return Float4(_mm_add_ps(m, rhs.m));
+
+		}
+
+		Float4 operator-(const Float4& rhs) const {
+			return Float4(_mm_sub_ps(m, rhs.m));
+
+		}
+
+		Float4 operator*(const Float4& rhs) const {
+			return Float4(_mm_mul_ps(m, rhs.m));
+
+		}
+
+		Float4 operator/(const Float4& rhs) const {
+			return Float4(_mm_div_ps(m, rhs.m));
+
+		}
+
+		Float4 operator<(const Float4& rhs) {
+			return Float4(_mm_cmplt_ps(m, rhs.m));
+		}
+
+		Float4 operator<=(const Float4& rhs) {
+			return Float4(_mm_cmple_ps(m, rhs.m));
+		}
+		Float4 operator==(const Float4& rhs) {
+			return Float4(_mm_cmpeq_ps(m, rhs.m));
+		}
+		Float4 operator!=(const Float4& rhs) {
+			return Float4(_mm_cmpneq_ps(m, rhs.m));
+		}
+		Float4 operator>(const Float4& rhs) {
+			return Float4(_mm_cmpgt_ps(m, rhs.m));
+		}
+
+		Float4 operator>=(const Float4& rhs) {
+			return Float4(_mm_cmpge_ps(m, rhs.m));
+		}
+
+		Float4 operator&&(const Float4& rhs) {
+			return Float4(_mm_and_ps(m, rhs.m));
+		}
+
+		void inv() {
+			v[0] = 1 / v[0];
+			v[1] = 1 / v[1];
+			v[2] = 1 / v[2];
+			v[3] = 1 / v[3];
+		}
+
+		void abs() {
+			v[0] = fabsf(v[0]);
+			v[1] = fabsf(v[1]);
+			v[2] = fabsf(v[2]);
+			v[3] = fabsf(v[3]);
+		}
+
+		Float& operator[](size_t i) { return v[i]; }
+
+		const Float& operator[](size_t i) const { return v[i]; }
+
+		static constexpr size_t width() { return 4; }
+	};
+ 
+
+template<class T, size_t N>
     struct VecBase {
         static constexpr size_t _N = N;
         T _v[_N];
