@@ -544,7 +544,7 @@ struct Matrix4 {
         Vec3f d = to - from;
         d.normalize();
         Vec3f xAxis = up.cross(d).normalized();
-        Vec3f yAxis = xAxis.cross(d).normalized();
+        Vec3f yAxis = -xAxis.cross(d).normalized();
         float m[4][4] = {
                 {xAxis.x, yAxis.x, d.x, 0},
                 {xAxis.y, yAxis.y, d.y, 0},
@@ -553,6 +553,18 @@ struct Matrix4 {
         };
         return Matrix4::translate(from) * Matrix4(m);
     }
+
+//    static Matrix4 project(const Float fov, Float aspect) {
+//        auto z = (Float) (2.0 / std::tan(fov / 2));
+//        // p.z /= z
+//        float m[4][4] = {
+//                {1, 0, 0, 0},
+//                {0, 1, 0, 0},
+//                {0, 0, 1, 0},
+//                {0, 0, 0, 1.0f / z}
+//        };
+//    }
+
 
     explicit Matrix4(float data[4][4]) {
         for (size_t i = 0; i < 4; i++) {
@@ -563,7 +575,7 @@ struct Matrix4 {
     }
 
     Matrix4 operator*(const Matrix4 &rhs) const {
-        Matrix4 m = *this;
+        Matrix4 m;
         for (size_t i = 0; i < 4; i++) {
             for (size_t j = 0; j < 4; j++) {
                 m._rows[i][j] = _rows[i].dot(rhs.column(j));
@@ -587,7 +599,7 @@ struct Matrix4 {
                 _rows[3].dot(v)};
     }
 
-    Vec<float, 4> column(size_t i) const {
+    [[nodiscard]] Vec<float, 4> column(size_t i) const {
         return Vec<float, 4>{_rows[0][i], _rows[1][i], _rows[2][i], _rows[3][i]};
     }
 
