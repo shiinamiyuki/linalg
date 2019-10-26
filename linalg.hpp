@@ -554,16 +554,29 @@ struct Matrix4 {
         return Matrix4::translate(from) * Matrix4(m);
     }
 
-//    static Matrix4 project(const Float fov, Float aspect) {
-//        auto z = (Float) (2.0 / std::tan(fov / 2));
-//        // p.z /= z
-//        float m[4][4] = {
-//                {1, 0, 0, 0},
-//                {0, 1, 0, 0},
-//                {0, 0, 1, 0},
-//                {0, 0, 0, 1.0f / z}
-//        };
-//    }
+    static Matrix4 scale(const Float x, const Float y, const Float z) {
+        float m[4][4] = {
+                {x, 0, 0, 0},
+                {0, y, 0, 0},
+                {0, 0, z, 0},
+                {0, 0, 0, 1}
+        };
+        return Matrix4(m);
+    }
+
+    static Matrix4 perspective(const Float fov, Float aspect, Float near, Float far) {
+        auto z = (Float) (2.0 / std::tan(fov / 2));
+
+        float m[4][4] = {
+                {1, 0, 0,                  0},
+                {0, 1, 0,                  0},
+                {0, 0, far * (far - near), -near * far / (far - near)},
+                {0, 0, 1,                  0}
+        };
+
+        Float invAtan = 1 / std::atan(fov / 2);
+        return Matrix4::scale(invAtan / aspect, invAtan, 1) * Matrix4(m);
+    }
 
 
     explicit Matrix4(float data[4][4]) {
