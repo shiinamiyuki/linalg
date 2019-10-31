@@ -598,7 +598,7 @@ struct Matrix4 {
     }
 
     Matrix4 &operator*=(const Matrix4 &rhs) {
-        auto m = *this * rhs;
+        auto m = rhs * *this;
         for (int i = 0; i < 4; i++)
             _rows[i] = m._rows[i];
         return *this;
