@@ -520,7 +520,7 @@ struct Matrix4 {
         return Matrix4(s);
     }
 
-    static Matrix4 rotate(const Vec3f &x, const Vec3f &axis, const Float angle) {
+    static Matrix4 rotate(const Vec3f &axis, const Float angle) {
         const Float s = sin(angle);
         const Float c = cos(angle);
         const Float oc = Float(1.0) - c;
