@@ -810,3 +810,13 @@ public:
         return p;
     }
 };
+
+template<class T>
+T lerp(const T &a, const T &b, float x) {
+    return x * a + (1 - x) * b;
+}
+
+template<class T>
+T lerp3(const T &v1, const T &v2, const T &v3, float u, float v) {
+    return (1 - u - v) * v1 + u * v1 + v * v2;
+}
