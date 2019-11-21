@@ -813,7 +813,7 @@ public:
 
 template<class T>
 T lerp(const T &a, const T &b, float x) {
-    return x * (1 - a) + b;
+    return a * (1 - x) + b * x;
 }
 
 template<class T>
