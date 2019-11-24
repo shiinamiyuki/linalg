@@ -342,7 +342,7 @@ template <class T, size_t N> struct BoundBox {
 };
 
 using Bounds3f = BoundBox<float, 3>;
-
+using Vec4f = Vec<float, 4>;
 struct Vec3f : Vec<float, 3> {
 
     Vec3f(const Vec<float, 3> &v) : Vec(v.x, v.y, v.z) {}
